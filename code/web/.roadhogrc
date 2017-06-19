@@ -1,0 +1,30 @@
+{
+  "entry": "src/index.js",
+  "disableCSSModules": false,
+  "publicPath": "/",
+  "outputPath": "./dist",
+  "theme": "./theme.config.js",
+  "extraBabelPlugins": [
+    "transform-runtime",
+    "dva-hmr",
+    ["import", { "libraryName": "antd", "libraryDirectory": "lib", "style": "css" }]
+  ],
+  "autoprefixer": {
+    "browsers": [
+      "iOS >= 8", "Android >= 4"
+    ]
+  },
+  "env": {
+    "development": {
+      "extraBabelPlugins": [
+        "dva-hmr",
+        "transform-runtime"
+      ]
+    },
+    "production": {
+      "extraBabelPlugins": [
+        "transform-runtime"
+      ]
+    }
+  }
+}
