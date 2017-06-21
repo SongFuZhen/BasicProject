@@ -15,12 +15,21 @@ const Routers = function ({ history, app }) {
       path: '/',
       component: App,
       getIndexRoute (nextState, cb) {
-        // require.ensure([], require => {
-        //   registerModel(app, require('./models/dashboard'))
-        //   cb(null, { component: require('./routes/dashboard/') })
-        // }, 'dashboard')
+        require.ensure([], require => {
+          registerModel(app, require('./models/dashboard'))
+          cb(null, { component: require('./routes/dashboard/') })
+        }, 'dashboard')
       },
       childRoutes: [
+        {
+          path: 'dashboard',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/dashboard'))
+              cb(null, require('./routes/dashboard/'))
+            }, 'dashboard')
+          },
+        },
         {
           path: 'login',
           getComponent (nextState, cb) {
@@ -32,6 +41,7 @@ const Routers = function ({ history, app }) {
         },
       ]
     },
+
   ]
 
   return <Router history={history} routes={routes} />
