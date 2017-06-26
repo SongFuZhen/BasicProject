@@ -2,7 +2,7 @@ const APIV1 = '/api/v1'
 const APIV2 = '/api/v2'
 
 module.exports = {
-  name: 'CCS JIS',
+  name: 'CCS 排序系统',
   prefix: 'Brilliantech',
   footerText: 'Brilliantech © 2017 IFTECH',
   logo: '/logo.png',
