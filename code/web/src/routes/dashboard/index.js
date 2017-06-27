@@ -17,7 +17,7 @@ const bodyStyle = {
 function Dashboard ({ dashboard }) {
   return (
     <Row gutter={24}>
-      Hello, guy
+      Hello, guy. You are good boy.
     </Row>
   )
 }
