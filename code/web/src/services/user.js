@@ -9,3 +9,19 @@ export async function query(params) {
         data: params
     })
 }
+
+export async function remove(params) {
+    return request({
+        url: user,
+        method: 'delete',
+        data: params
+    })
+}
+
+export async function update(params){
+    return request({
+        url: user,
+        method: 'patch',
+        data: params
+    })
+}

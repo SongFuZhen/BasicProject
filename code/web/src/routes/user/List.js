@@ -1,20 +1,31 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Modal } from 'antd'
+import { Table, Modal, Menu, Dropdown, Button, Icon, message, Tooltip } from 'antd'
 import styles from './List.less'
 import classnames from 'classnames'
 import { Link } from 'dva/router'
 
 const confirm = Modal.confirm
 
-const List = ({location, ...tableProps}) => {
-    
+const List = ({ onDeleteItem, onEditItem, location, ...tableProps}) => {
+   function handleDeleteClick(record, e) {
+        confirm({
+            title: '确定要删除用户'+record.name+'吗？',
+            onOk(){
+                onDeleteItem(record.id)
+            }
+        })
+    }
+
+    function handleUpdateClick(record, e) {
+        onEditItem(record)
+    }
+
     const columns = [
         {
             title: 'Avatar',
             dataIndex: 'avatar',
             key: 'avatar',
-            width: 64,
             className: styles.avatar,
             render: (text) => <img alt={'avatar'} width={24} src={text} />,
         },
@@ -22,8 +33,12 @@ const List = ({location, ...tableProps}) => {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            width: 200,
             render: (text, record) => <Link to = {`user/${record.id}`}> {text} </Link>
+        },
+        {
+            title: 'NickName',
+            dataIndex: 'nickName',
+            key: 'nickName',
         },
         {
             title: 'Age',
@@ -41,12 +56,30 @@ const List = ({location, ...tableProps}) => {
             </span>
         },
         {
+            title: 'Phone',
+            dataIndex: 'phone',
+            key: 'phone'
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email'
+        },
+        {
+            title: 'Address',
+            dataIndex: 'address',
+            key: 'address'
+        },
+        {
             title: 'Operation',
             dataIndex: 'operation',
             key: 'operation',
             width: 100,
             render: (text, record) => {
-                return <span>Good Man </span>
+                return <div><Tooltip title='编辑用户信息'><Button type="primary" htmlType="button" size="small" onClick={e => handleUpdateClick(record, e)} shape="circle" icon="edit" /></Tooltip>
+                <Tooltip title='删除该条信息?'>
+                    <Button type="primary" htmlType="button" size="small" onClick={e => handleDeleteClick(record, e)} shape="circle" icon="delete" style={{marginLeft: '8px'}} />
+                </Tooltip></div>
             }
         }
     ]
@@ -65,6 +98,8 @@ const List = ({location, ...tableProps}) => {
 }
 
 List.propTypes = {
+    onEditItem: PropTypes.func,
+    onDeleteItem: PropTypes.func,
     location: PropTypes.object
 }
 

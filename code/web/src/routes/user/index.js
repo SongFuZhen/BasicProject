@@ -2,14 +2,35 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
-import { Table } from 'antd'
+import { Table, message } from 'antd'
 import { config } from '../../utils'
 import styles from './index.less'
 import List from './List'
+import Modal from './Modal'
 
 const User = ({ location, dispatch, user, loading }) => {
-  const { list, pagination, currentItem } = user
+  const { list, pagination, currentItem, modalVisible, modalType } = user
   const { pageSize } = pagination
+
+  const modalProps = {
+    item: modalType === 'create' ? {} : currentItem,
+    visible: modalVisible,
+    maskClosable: false,
+    confirmLoading: loading.effects['user/update'],
+    title: `${modalType === 'create' ? 'Create User' : 'Update User'}`,
+    wrapClassName: 'vertical-center-modal',
+    onOk(data){
+      dispatch({
+        type: `user/${modalType}`,
+        payload: data,
+      })
+    },
+    onCancel () {
+      dispatch({
+        type: 'user/hideModal',
+      })
+    }
+  }
 
   const listProps = {
     dataSource: list,
@@ -27,12 +48,28 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       }))
     },
+    onDeleteItem (id) {
+      dispatch({
+        type: 'user/delete',
+        payload: id,
+      })
+    },
+    onEditItem(item){
+      dispatch({
+        type: 'user/showModal',
+        payload: {
+          modalType: 'update',
+          currentItem: item,
+        },
+      })
+    },
   }
   
   return (
     <div className="content-inner">
       <List {...listProps} />
-     </div>
+      {modalVisible && <Modal {...modalProps} />}
+    </div>
   )
 }
 
