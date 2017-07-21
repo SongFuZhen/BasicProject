@@ -13,6 +13,13 @@ module.exports = [
     router: '/user',
   },
   {
+    id: 711,
+    bpid: 1,
+    name: '客户管理',
+    icon: 'shopping-cart',
+    router: '/client',
+  },
+  {
     id: 7,
     bpid: 1,
     name: 'Posts',
