@@ -47,7 +47,25 @@ const Routers = function ({ history, app }) {
               cb(null, require('./routes/user/'))
             }, 'user')
           },
-        }
+        },
+        {
+          path: 'client',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/client'))
+              cb(null, require('./routes/client/'))
+            }, 'client')
+          },
+        },
+        {
+          path: 'client/create',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/client/create'))
+              cb(null, require('./routes/client/create/'))
+            }, 'client-create')
+          },
+        },
       ]
     },
 

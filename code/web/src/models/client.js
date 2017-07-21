@@ -6,12 +6,11 @@ import { pageModel } from './common'
 import { config } from '../utils'
 import { notification } from 'antd'
 
-const { query }  = usersService 
+const { query }  = clientsService 
 const { prefix } = config
 
 export default modelExtend(pageModel, {
   namespace: 'client',
-
   state: {
     currentItem: {},
     modalVisible: false,
@@ -46,21 +45,6 @@ export default modelExtend(pageModel, {
         throw data
       }
     },
-    *update ({ payload }, { call, put, select }){
-      const id = yield select(({user}) => user.currentItem.id)
-      const newUser = { ...payload, id}
-      const data = yield call(update, newUser)
-      if(data.success){
-        yield put({ type: 'hideModal' })
-        yield put({ type: 'query' })
-      
-        notification['success']({
-          message: '编辑成功'
-        });
-      }else{
-        throw data
-      }
-    }
   },
   reducers: {
     showModal(state, { payload }){
@@ -73,7 +57,7 @@ export default modelExtend(pageModel, {
   subscriptions: {
     setup({dispatch, history }){
       history.listen(location => {
-        if(location.pathname === '/user'){
+        if(location.pathname === '/client'){
           dispatch({
             type: 'query',
             payload: location.query

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
-import { Table, message } from 'antd'
+import { Table, message, Button } from 'antd'
 import { config } from '../../utils'
 import styles from './index.less'
 import List from './List'
@@ -67,6 +67,9 @@ const Client = ({ location, dispatch, user, loading }) => {
   
   return (
     <div className="content-inner">
+      <Button type="primary">
+        <a href="/client/create">新建</a>
+      </Button>
       <List {...listProps} />
       {modalVisible && <Modal {...modalProps} />}
     </div>
