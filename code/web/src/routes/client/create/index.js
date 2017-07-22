@@ -15,11 +15,6 @@ const Create = ({
   tags = ['上海浦东新区郭守敬路498号19号楼405B室','上海浦东新区郭守敬路498号19号楼405B室'],
   inputVisible = false,
   inputValue = '',
-  form: {
-    getFieldDecorator,
-    validateFields,
-    getFieldsValue
-  }
   }) => {
   
   const handleClose = (removeTag) => {
@@ -115,13 +110,7 @@ const Create = ({
                 label="*中文名称"
                 hasFeedback
               >
-              {
-                getFieldDecorator('name',{
-                  rules: [{
-                    required: true,
-                    }
-                  ]
-                })(<Input placeholder="中文名称" />)
+              <Input placeholder="中文名称" />
               }
                 
               </FormItem>
