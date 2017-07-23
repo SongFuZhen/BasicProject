@@ -2,14 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
-import { Table, message } from 'antd'
-import { config } from '../../utils'
-import styles from './index.less'
+import { Row, Col, Button, Popconfirm } from 'antd'
 import List from './List'
+import Filter from './Filter'
 import Modal from './Modal'
 
 const User = ({ location, dispatch, user, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType } = user
+  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = user
   const { pageSize } = pagination
 
   const modalProps = {
@@ -19,7 +18,7 @@ const User = ({ location, dispatch, user, loading }) => {
     confirmLoading: loading.effects['user/update'],
     title: `${modalType === 'create' ? 'Create User' : 'Update User'}`,
     wrapClassName: 'vertical-center-modal',
-    onOk(data){
+    onOk (data) {
       dispatch({
         type: `user/${modalType}`,
         payload: data,
@@ -29,7 +28,7 @@ const User = ({ location, dispatch, user, loading }) => {
       dispatch({
         type: 'user/hideModal',
       })
-    }
+    },
   }
 
   const listProps = {
@@ -37,14 +36,15 @@ const User = ({ location, dispatch, user, loading }) => {
     loading: loading.effects['user/query'],
     pagination,
     location,
-    onChange (page){
+    isMotion,
+    onChange (page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
         query: {
           ...query,
           page: page.current,
-          pageSize: page.pageSize
+          pageSize: page.pageSize,
         },
       }))
     },
@@ -54,7 +54,7 @@ const User = ({ location, dispatch, user, loading }) => {
         payload: id,
       })
     },
-    onEditItem(item){
+    onEditItem (item) {
       dispatch({
         type: 'user/showModal',
         payload: {
@@ -63,10 +63,81 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       })
     },
+    rowSelection: {
+      selectedRowKeys,
+      onChange: (keys) => {
+        dispatch({
+          type: 'user/updateState',
+          payload: {
+            selectedRowKeys: keys,
+          },
+        })
+      },
+    },
   }
-  
+
+  const filterProps = {
+    isMotion,
+    filter: {
+      ...location.query,
+    },
+    onFilterChange (value) {
+      dispatch(routerRedux.push({
+        pathname: location.pathname,
+        query: {
+          ...value,
+          page: 1,
+          pageSize,
+        },
+      }))
+    },
+    onSearch (fieldsValue) {
+      fieldsValue.keyword.length ? dispatch(routerRedux.push({
+        pathname: '/user',
+        query: {
+          field: fieldsValue.field,
+          keyword: fieldsValue.keyword,
+        },
+      })) : dispatch(routerRedux.push({
+        pathname: '/user',
+      }))
+    },
+    onAdd () {
+      dispatch({
+        type: 'user/showModal',
+        payload: {
+          modalType: 'create',
+        },
+      })
+    },
+    switchIsMotion () {
+      dispatch({ type: 'user/switchIsMotion' })
+    },
+  }
+
+  const handleDeleteItems = () => {
+    dispatch({
+      type: 'user/multiDelete',
+      payload: {
+        ids: selectedRowKeys,
+      },
+    })
+  }
+
   return (
     <div className="content-inner">
+      <Filter {...filterProps} />
+      {
+         selectedRowKeys.length > 0 &&
+           <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
+             <Col>
+               {`Selected ${selectedRowKeys.length} items `}
+               <Popconfirm title={'Are you sure delete these items?'} placement="left" onConfirm={handleDeleteItems}>
+                 <Button type="primary" size="large" style={{ marginLeft: 8 }}>Remove</Button>
+               </Popconfirm>
+             </Col>
+           </Row>
+      }
       <List {...listProps} />
       {modalVisible && <Modal {...modalProps} />}
     </div>
@@ -77,7 +148,7 @@ User.propTypes = {
   user: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
-  loading: PropTypes.object
+  loading: PropTypes.object,
 }
 
-export default connect(({user, loading }) => ({ user, loading }))(User)
+export default connect(({ user, loading }) => ({ user, loading }))(User)

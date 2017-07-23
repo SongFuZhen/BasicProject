@@ -2,15 +2,14 @@ const APIV1 = '/api/v1'
 const APIV2 = '/api/v2'
 
 module.exports = {
-  name: 'CCS 排序系统',
-  prefix: 'Brilliantech',
-  footerText: 'Brilliantech © 2017 IFTECH',
+  name: 'AntD Admin',
+  prefix: 'antdAdmin',
+  footerText: 'Ant Design Admin  © 2017 zuiidea',
   logo: '/logo.png',
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
   YQL: ['http://www.zuimeitianqi.com'],
-  CORS: ['http://localhost:7000'],
-  pageSize: 20,
+  CORS: [],
   openPages: ['/login'],
   apiPrefix: '/api/v1',
   api: {
@@ -21,6 +20,7 @@ module.exports = {
     posts: `${APIV1}/posts`,
     user: `${APIV1}/user/:id`,
     dashboard: `${APIV1}/dashboard`,
+    menus: `${APIV1}/menus`,
     v1test: `${APIV1}/test`,
     v2test: `${APIV2}/test`,
   },

@@ -25,14 +25,23 @@ let usersListData = Mock.mock({
 
 let database = usersListData.data
 
+const EnumRoleType = {
+  ADMIN: 'admin',
+  DEFAULT: 'guest',
+  DEVELOPER: 'developer',
+}
+
 const userPermission = {
-  DEFAULT: [
-    'dashboard', 'chart',
-  ],
-  ADMIN: [
-    'dashboard', 'users', 'UIElement', 'UIElementIconfont', 'chart',
-  ],
-  DEVELOPER: ['dashboard', 'users', 'UIElement', 'UIElementIconfont', 'chart'],
+  DEFAULT: {
+    visit: ['1', '2', '21', '7', '5', '51', '52', '53'],
+    role: EnumRoleType.DEFAULT,
+  },
+  ADMIN: {
+    role: EnumRoleType.ADMIN,
+  },
+  DEVELOPER: {
+    role: EnumRoleType.DEVELOPER,
+  },
 }
 
 const adminUsers = [
@@ -75,7 +84,7 @@ const queryArray = (array, key, keyAlias = 'key') => {
 
 const NOTFOUND = {
   message: 'Not Found',
-  documentation_url: 'http://localhost:3001/request',
+  documentation_url: 'http://localhost:8000/request',
 }
 
 module.exports = {
